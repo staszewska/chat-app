@@ -89,21 +89,21 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 15,
     fontSize: 16,
-    fontWeight: 300,
+    // fontWeight: 300,
     fontColor: "#757083",
     opacity: 0.5,
   },
 
   title: {
     fontSize: 45,
-    fontWeight: "600",
+    // fontWeight: 600,
     color: "#FFFFFF",
     marginBottom: 20,
   },
 
   text: {
     fontSize: 16,
-    fontWeight: "300",
+    // fontWeight: 300,
     color: "#757083",
     opacity: 1,
     marginBottom: 10,
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
 
   buttonText: {
     fontSize: 16,
-    fontWeight: "600",
+    // fontWeight: 600,
     color: "#FFFFFF",
   },
 
