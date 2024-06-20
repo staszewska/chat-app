@@ -59,12 +59,14 @@ const Start = ({ navigation }) => {
                 onPress={() => handleBackgroundColor("#B9C6AE")}
               ></TouchableOpacity>
             </View>
+
             <TouchableOpacity
               style={styles.button}
               onPress={() =>
+                //button navigates to "Chat screen" when pressed
                 navigation.navigate("Chat", {
-                  name: name,
-                  backgroundColor: selectedColor,
+                  name: name, // parameter that represents the user's name to display
+                  backgroundColor: selectedColor, // parameter that represents the background color
                 })
               }
             >
