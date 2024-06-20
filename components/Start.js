@@ -3,11 +3,12 @@ import {
   StyleSheet,
   View,
   Text,
-  Button,
   TextInput,
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
+// adjusts the layout correctly when the keyboard is shown
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const image = require("../A5-chatapp-assets/BackgroundImage.png");
 
@@ -21,65 +22,81 @@ const Start = ({ navigation }) => {
 
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-      <View style={styles.container}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.container}
+        enableOnAndroid={true}
+        extraScrollHeight={20}
+      >
         <Text style={styles.title}>Chat App</Text>
+
         <View style={styles.mainContainer}>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={setName}
-            value={name}
-            placeholder="Enter your name"
-            placeholderTextColor="#757083"
-          ></TextInput>
-          <Text style={styles.text}>Choose Background Color</Text>
-          <View style={styles.colorOptions}>
+          <View style={styles.innerContainer}>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={setName}
+              value={name}
+              placeholder="Enter your name"
+              placeholderTextColor="#757083"
+            ></TextInput>
+
+            <Text style={styles.text}>Choose Background Color</Text>
+
+            <View style={styles.colorOptions}>
+              <TouchableOpacity
+                style={[styles.colorOption, { backgroundColor: "#090C08" }]}
+                onPress={() => handleBackgroundColor("#090C08")}
+              ></TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.colorOption, { backgroundColor: "#474056" }]}
+                onPress={() => handleBackgroundColor("#474056")}
+              ></TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.colorOption, { backgroundColor: "#8A95A5" }]}
+                onPress={() => handleBackgroundColor("#8A95A5")}
+              ></TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.colorOption, { backgroundColor: "#B9C6AE" }]}
+                onPress={() => handleBackgroundColor("#B9C6AE")}
+              ></TouchableOpacity>
+            </View>
             <TouchableOpacity
-              style={[styles.colorOption, { backgroundColor: "#090C08" }]}
-              onPress={() => handleBackgroundColor("#090C08")}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.colorOption, { backgroundColor: "#474056" }]}
-              onPress={() => handleBackgroundColor("#474056")}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.colorOption, { backgroundColor: "#8A95A5" }]}
-              onPress={() => handleBackgroundColor("#8A95A5")}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.colorOption, { backgroundColor: "#B9C6AE" }]}
-              onPress={() => handleBackgroundColor("#B9C6AE")}
-            ></TouchableOpacity>
+              style={styles.button}
+              onPress={() =>
+                navigation.navigate("Chat", {
+                  name: name,
+                  backgroundColor: selectedColor,
+                })
+              }
+            >
+              <Text style={styles.buttonText}>Start chatting</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() =>
-              navigation.navigate("Chat", {
-                name: name,
-                backgroundColor: selectedColor,
-              })
-            }
-          >
-            <Text style={styles.buttonText}>Start chatting</Text>
-          </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "space-around",
+    flexGrow: 1,
+    justifyContent: "space-evenly",
     alignItems: "center",
+  },
+
+  innerContainer: {
+    justifyContent: "center",
+    width: "100%",
+    flex: 1,
+    marginTop: -20,
   },
 
   mainContainer: {
     width: "80%",
-    padding: 20,
+    padding: 30,
     backgroundColor: "white",
-    justifyContent: "space-evenly",
-    height: "35%",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 5,
   },
   textInput: {
@@ -115,7 +132,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     height: "20%",
     justifyContent: "center",
-    padding: 10,
+    // padding: 10,
     width: "88%",
   },
 
