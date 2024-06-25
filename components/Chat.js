@@ -1,11 +1,18 @@
 import { useEffect, useState, useCallback } from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { GiftedChat } from "react-native-gifted-chat";
-import { KeyboardAvoidingView, Platform } from "react-native";
-import { Bubble } from "react-native-gifted-chat";
+import { GiftedChat, Bubble } from "react-native-gifted-chat";
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  onSnapshot,
+  query,
+  orderBy,
+} from "firebase/firestore";
 
-const Chat = ({ route, navigation }) => {
-  const { name, backgroundColor } = route.params;
+const Chat = ({ route, navigation, db }) => {
+  const { name, background, userID } = route.params;
+
   const [messages, setMessages] = useState([]);
 
   const renderBubble = (props) => {
@@ -28,32 +35,35 @@ const Chat = ({ route, navigation }) => {
     navigation.setOptions({ title: name });
   }, []);
 
+  //query to fetch messages
   useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: "Hello developer",
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: "React Native",
-          // avatar: "https://placeimg.com/140/140/any",
-        },
-      },
-      {
-        _id: 2,
-        text: "This is a system message",
-        createdAt: new Date(),
-        system: true,
-      },
-    ]);
+    const messagesQuery = query(
+      collection(db, "messages"),
+      orderBy("createdAt", "desc")
+    );
+
+    //onSnapshot listener to get real-time updates
+    const unsubscribe = onSnapshot(messagesQuery, (documentsSnapshot) => {
+      let newMessages = [];
+      documentsSnapshot.forEach((doc) => {
+        newMessages.push({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: new Date(doc.data().createdAt.toMillis()),
+        });
+      });
+      setMessages(newMessages);
+    });
+
+    //clean up function to unsubscribe from the listener when the component unmounts
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
-  const onSend = useCallback((messages = []) => {
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, messages)
-    );
-  }, []);
+  const onSend = (newMessages) => {
+    addDoc(collection(db, "messages"), newMessages[0]);
+  };
 
   return (
     <View style={styles.container}>
@@ -64,6 +74,7 @@ const Chat = ({ route, navigation }) => {
         user={{
           _id: 1,
         }}
+        name={name}
       />
       {Platform.OS === "android" ? (
         <KeyboardAvoidingView behavior="height" />
@@ -71,13 +82,6 @@ const Chat = ({ route, navigation }) => {
     </View>
   );
 };
-
-//   return (
-//     <View style={[styles.container, { backgroundColor: backgroundColor }]}>
-//       <Text>Welcome to the chat</Text>
-//     </View>
-//   );
-// };
 
 const styles = StyleSheet.create({
   container: {
