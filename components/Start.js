@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getAuth, signInAnonymously } from "firebase/auth";
 import {
   StyleSheet,
   View,
@@ -6,6 +7,8 @@ import {
   TextInput,
   TouchableOpacity,
   ImageBackground,
+  Alert,
+  TouchableWithoutFeedback,
 } from "react-native";
 // adjusts the layout correctly when the keyboard is shown
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -15,6 +18,24 @@ const image = require("../A5-chatapp-assets/BackgroundImage.png");
 const Start = ({ navigation }) => {
   const [name, setName] = useState("");
   const [selectedColor, setSelectedColor] = useState("white");
+
+  const auth = getAuth();
+
+  //sign-in logic
+  const signInUser = () => {
+    signInAnonymously(auth)
+      .then((result) => {
+        navigation.navigate("Chat", {
+          userID: result.user.uid,
+          name: name,
+          selectedColor: selectedColor,
+        });
+        Alert.alert("Signed in Successfully!");
+      })
+      .catch((error) => {
+        Alert.alert("Unable to sign in, try later again.");
+      });
+  };
 
   const handleBackgroundColor = (color) => {
     setSelectedColor(color);
@@ -60,18 +81,11 @@ const Start = ({ navigation }) => {
               ></TouchableOpacity>
             </View>
 
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() =>
-                //button navigates to "Chat screen" when pressed
-                navigation.navigate("Chat", {
-                  name: name, // parameter that represents the user's name to display
-                  backgroundColor: selectedColor, // parameter that represents the background color
-                })
-              }
-            >
-              <Text style={styles.buttonText}>Start chatting</Text>
-            </TouchableOpacity>
+            <TouchableWithoutFeedback onPress={signInUser}>
+              <View style={styles.button}>
+                <Text style={styles.buttonText}>Start chatting</Text>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
         </View>
       </KeyboardAwareScrollView>
@@ -129,19 +143,15 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    alignItems: "center",
     backgroundColor: "#757083",
     borderRadius: 4,
-    height: "20%",
+    padding: 10,
     justifyContent: "center",
-    // padding: 10,
-    width: "88%",
+    alignItems: "center",
   },
-
   buttonText: {
+    color: "#ffffff",
     fontSize: 16,
-    // fontWeight: 600,
-    color: "#FFFFFF",
   },
 
   colorOptions: {
