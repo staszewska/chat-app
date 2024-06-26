@@ -17,7 +17,7 @@ const image = require("../A5-chatapp-assets/BackgroundImage.png");
 
 const Start = ({ navigation }) => {
   const [name, setName] = useState("");
-  const [selectedColor, setSelectedColor] = useState("white");
+  const [backgroundColor, setBackgroundColor] = useState("white");
 
   const auth = getAuth();
 
@@ -28,7 +28,7 @@ const Start = ({ navigation }) => {
         navigation.navigate("Chat", {
           userID: result.user.uid,
           name: name,
-          selectedColor: selectedColor,
+          background: backgroundColor,
         });
         Alert.alert("Signed in Successfully!");
       })
@@ -38,7 +38,7 @@ const Start = ({ navigation }) => {
   };
 
   const handleBackgroundColor = (color) => {
-    setSelectedColor(color);
+    setBackgroundColor(color);
   };
 
   return (
