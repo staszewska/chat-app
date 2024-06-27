@@ -1,5 +1,5 @@
-import { React, useEffect, useState, useCallback } from "react";
-import { GiftedChat, Bubble } from "react-native-gifted-chat";
+import { React, useEffect, useState } from "react";
+import { GiftedChat, Bubble, InputToolbar } from "react-native-gifted-chat";
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import {
   collection,
@@ -29,6 +29,12 @@ const Chat = ({ route, navigation, db, isConnected }) => {
         }}
       />
     );
+  };
+
+  //function to render the InputToolbar based on connection status
+  const renderInoutToolbar = (props) => {
+    if (isConnected) return <InputToolbar {...props} />;
+    else return null;
   };
 
   //save messages to the device's local storage
