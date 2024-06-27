@@ -9,6 +9,7 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Chat = ({ route, navigation, db, isConnected }) => {
   const { name, background, userID } = route.params;
@@ -32,7 +33,7 @@ const Chat = ({ route, navigation, db, isConnected }) => {
   };
 
   //function to render the InputToolbar based on connection status
-  const renderInoutToolbar = (props) => {
+  const renderInputToolbar = (props) => {
     if (isConnected) return <InputToolbar {...props} />;
     else return null;
   };
@@ -95,6 +96,7 @@ const Chat = ({ route, navigation, db, isConnected }) => {
         messages={messages}
         onSend={(messages) => onSend(messages)}
         renderBubble={renderBubble}
+        renderInputToolbar={renderInputToolbar}
         user={{
           _id: userID,
         }}
