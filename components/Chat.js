@@ -31,12 +31,20 @@ const Chat = ({ route, navigation, db, isConnected }) => {
     );
   };
 
+  //save messages to the device's local storage
   const cacheMessages = async (messagesToCache) => {
     try {
       await AsyncStorage.setItem("messages", JSON.stringify(messagesToCache));
     } catch (error) {
       console.log(error.message);
     }
+  };
+
+  //load messages from the device's local storage
+  const loadCachedMessages = async () => {
+    // The empty array is for cachedMessages in case AsyncStorage() fails when the messages item hasn’t been set yet in AsyncStorage.
+    const cachedMessages = (await AsyncStorage.getItem("messages")) || [];
+    setMessages(JSON.parse(cachedMessages));
   };
 
   useEffect(() => {
@@ -73,12 +81,6 @@ const Chat = ({ route, navigation, db, isConnected }) => {
 
   const onSend = (newMessages) => {
     addDoc(collection(db, "messages"), newMessages[0]);
-  };
-
-  const loadCachedMessages = async () => {
-    // The empty array is for cachedMessages in case AsyncStorage() fails when the messages item hasn’t been set yet in AsyncStorage.
-    const cachedMessages = (await AsyncStorage.getItem("messages")) || [];
-    setMessages(JSON.parse(cachedMessages));
   };
 
   return (
