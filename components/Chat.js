@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { React, useEffect, useState, useCallback } from "react";
 import { GiftedChat, Bubble } from "react-native-gifted-chat";
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import {
@@ -10,7 +10,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 
-const Chat = ({ route, navigation, db }) => {
+const Chat = ({ route, navigation, db, isConnected }) => {
   const { name, background, userID } = route.params;
 
   const [messages, setMessages] = useState([]);
@@ -31,38 +31,54 @@ const Chat = ({ route, navigation, db }) => {
     );
   };
 
-  useEffect(() => {
-    navigation.setOptions({ title: name });
-  }, []);
+  const cacheMessages = async (messagesToCache) => {
+    try {
+      await AsyncStorage.setItem("messages", JSON.stringify(messagesToCache));
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
-  //query to fetch messages
   useEffect(() => {
-    const messagesQuery = query(
-      collection(db, "messages"),
-      orderBy("createdAt", "desc")
-    );
+    let unsubscribe;
+    if (isConnected === true) {
+      navigation.setOptions({ title: name });
 
-    //onSnapshot listener to get real-time updates
-    const unsubscribe = onSnapshot(messagesQuery, (documentsSnapshot) => {
-      let newMessages = [];
-      documentsSnapshot.forEach((doc) => {
-        newMessages.push({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: new Date(doc.data().createdAt.toMillis()),
+      //query to fetch messages
+      const messagesQuery = query(
+        collection(db, "messages"),
+        orderBy("createdAt", "desc")
+      );
+
+      //onSnapshot listener to get real-time updates
+      const unsubscribe = onSnapshot(messagesQuery, (documentsSnapshot) => {
+        let newMessages = [];
+        documentsSnapshot.forEach((doc) => {
+          newMessages.push({
+            id: doc.id,
+            ...doc.data(),
+            createdAt: new Date(doc.data().createdAt.toMillis()),
+          });
         });
+        setMessages(newMessages);
+        cacheMessages(newMessages);
       });
-      setMessages(newMessages);
-    });
+    } else loadCachedMessages();
 
     //clean up function to unsubscribe from the listener when the component unmounts
     return () => {
       if (unsubscribe) unsubscribe();
     };
-  }, []);
+  }, [isConnected]);
 
   const onSend = (newMessages) => {
     addDoc(collection(db, "messages"), newMessages[0]);
+  };
+
+  const loadCachedMessages = async () => {
+    // The empty array is for cachedMessages in case AsyncStorage() fails when the messages item hasn’t been set yet in AsyncStorage.
+    const cachedMessages = (await AsyncStorage.getItem("messages")) || [];
+    setMessages(JSON.parse(cachedMessages));
   };
 
   return (
