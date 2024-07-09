@@ -13,6 +13,7 @@ import { initializeAuth, getReactNativePersistence } from "firebase/auth"; // Im
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { React, useEffect } from "react";
+import * as ImagePicker from "expo-image-picker";
 
 const Stack = createNativeStackNavigator();
 
