@@ -1,7 +1,41 @@
 import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
+import { useActionSheet } from "@expo/react-native-action-sheet";
 
 const CustomActions = ({ wrapperStyle, iconTextStyle }) => {
-  const onActionPress = () => {};
+  //useActionSheet is a hook that provides functionality to show and action sheet
+  const actionSheet = useActionSheet();
+
+  const onActionPress = () => {
+    //options that will appear
+    const options = [
+      "Choose From Library",
+      "Take Picture",
+      "Send Location",
+      "Cancel",
+    ];
+
+    const cancelButtonIndex = options.length - 1;
+    //show the action sheet with the defined options and handle the button press
+    actionSheet.showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+      },
+      async (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            pickImage();
+            return;
+          case 1:
+            takePhoto();
+            return;
+          case 2:
+            getLocation();
+          default:
+        }
+      }
+    );
+  };
 
   return (
     <TouchableOpacity style={styles.container} onPress={onActionPress}>
