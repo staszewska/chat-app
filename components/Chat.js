@@ -10,6 +10,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CustomActions from "./CustomActions";
 
 const Chat = ({ route, navigation, db, isConnected }) => {
   const { name, background, userID } = route.params;
@@ -36,6 +37,11 @@ const Chat = ({ route, navigation, db, isConnected }) => {
   const renderInputToolbar = (props) => {
     if (isConnected) return <InputToolbar {...props} />;
     else return null;
+  };
+
+  //creates the circle action button
+  const renderCustomActions = (props) => {
+    return <CustomActions {...props} />;
   };
 
   //save messages to the device's local storage
@@ -97,6 +103,7 @@ const Chat = ({ route, navigation, db, isConnected }) => {
         onSend={(messages) => onSend(messages)}
         renderBubble={renderBubble}
         renderInputToolbar={renderInputToolbar}
+        renderActions={renderCustomActions}
         user={{
           _id: userID,
         }}
