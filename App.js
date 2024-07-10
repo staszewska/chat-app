@@ -1,4 +1,4 @@
-import { StyleSheet, Alert, LogBox } from "react-native";
+import { StyleSheet, Alert } from "react-native";
 import Chat from "./components/Chat";
 import Start from "./components/Start";
 import { NavigationContainer } from "@react-navigation/native";
@@ -9,11 +9,10 @@ import {
   disableNetwork,
   enableNetwork,
 } from "firebase/firestore";
-import { initializeAuth, getReactNativePersistence } from "firebase/auth"; // Import Auth functions
+import { initializeAuth, getReactNativePersistence } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNetInfo } from "@react-native-community/netinfo";
-import { React, useEffect } from "react";
-import * as ImagePicker from "expo-image-picker";
+import { useEffect } from "react";
 import { getStorage } from "firebase/storage";
 
 const Stack = createNativeStackNavigator();
@@ -30,9 +29,10 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Cloud Firestore and get a reference to the service
+// Initialize Firestore and get a reference to the service
 const db = getFirestore(app);
-//initialize the storage handler
+
+// Initialize Storage and get a reference to the service
 const storage = getStorage(app);
 
 // Initialize Firebase Auth with persistence
@@ -55,7 +55,6 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Start">
         <Stack.Screen name="Start" component={Start} />
-
         <Stack.Screen name="Chat">
           {(props) => (
             <Chat
@@ -74,7 +73,6 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
