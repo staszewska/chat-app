@@ -1,7 +1,8 @@
 import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { useActionSheet } from "@expo/react-native-action-sheet";
+import * as Location from "expo-location";
 
-const CustomActions = ({ wrapperStyle, iconTextStyle }) => {
+const CustomActions = ({ wrapperStyle, iconTextStyle, onSend }) => {
   //useActionSheet is a hook that provides functionality to show and action sheet
   const actionSheet = useActionSheet();
 
@@ -35,6 +36,42 @@ const CustomActions = ({ wrapperStyle, iconTextStyle }) => {
         }
       }
     );
+  };
+
+  const pickImage = async () => {
+    let permissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (permissions?.granted) {
+      let result = await ImagePicker.launchImageLibraryAsync();
+      if (!result.canceled) {
+        console.log("uploading and uploading the image occurs here");
+      } else Alert.alert("Permissions haven't been granted.");
+    }
+  };
+
+  const takePhoto = async () => {
+    let permissions = await ImagePicker.requestCameraPermissionsAsync();
+    if (permissions?.granted) {
+      let result = await ImagePicker.launchCameraAsync();
+      if (!result.canceled) {
+        console.log("uploading and uploading the image occurs here");
+      } else Alert.alert("Permissions haven't been granted.");
+    }
+  };
+
+  //send device location
+  const getLocation = async () => {
+    let permissions = await Location.requestForegroundPermissionsAsync();
+    if (permissions?.granted) {
+      const location = await Location.getCurrentPositionAsync({});
+      if (location) {
+        onSend({
+          location: {
+            longitude: location.coords.longitude,
+            latitude: location.coords.latitude,
+          },
+        });
+      } else Alert.alert("Error occurred while fetching location");
+    } else Alert.alert("Permissions haven't been granted.");
   };
 
   return (
