@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { React, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
+import { getStorage } from "firebase/storage";
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,8 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
+//initialize the storage handler
+const storage = getStorage(app);
 
 // Initialize Firebase Auth with persistence
 const auth = initializeAuth(app, {
@@ -58,6 +61,7 @@ const App = () => {
             <Chat
               isConnected={connectionStatus.isConnected}
               db={db}
+              storage={storage}
               {...props}
             />
           )}
