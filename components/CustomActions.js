@@ -13,6 +13,9 @@ const CustomActions = ({
 }) => {
   const actionSheet = useActionSheet();
 
+  // Debugging: Check if storage is passed correctly
+  console.log("CustomActions component storage prop:", storage);
+
   const onActionPress = () => {
     const options = [
       "Choose From Library",
@@ -42,23 +45,25 @@ const CustomActions = ({
     );
   };
 
-  const pickImage = async () => {
-    let permissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (permissions?.granted) {
-      let result = await ImagePicker.launchImageLibraryAsync();
-      if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
-      else Alert.alert("Permissions haven't been granted.");
-    }
-  };
+  // const pickImage = async () => {
+  //   let permissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  //   if (permissions?.granted) {
+  //     let result = await ImagePicker.launchImageLibraryAsync();
+  //     if (!result.canceled) {
+  //       console.log("uploading and uploading the image occurs here");
+  //     } else Alert.alert("Permissions haven't been granted.");
+  //   }
+  // };
 
-  const takePhoto = async () => {
-    let permissions = await ImagePicker.requestCameraPermissionsAsync();
-    if (permissions?.granted) {
-      let result = await ImagePicker.launchCameraAsync();
-      if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
-      else Alert.alert("Permissions haven't been granted.");
-    }
-  };
+  // const takePhoto = async () => {
+  //   let permissions = await ImagePicker.requestCameraPermissionsAsync();
+  //   if (permissions?.granted) {
+  //     let result = await ImagePicker.launchCameraAsync();
+  //     if (!result.canceled) {
+  //       console.log("uploading and uploading the image occurs here");
+  //     } else Alert.alert("Permissions haven't been granted.");
+  //   }
+  // };
 
   const getLocation = async () => {
     let permissions = await Location.requestForegroundPermissionsAsync();
@@ -91,6 +96,24 @@ const CustomActions = ({
       const imageURL = await getDownloadURL(snapshot.ref);
       onSend({ image: imageURL });
     });
+  };
+
+  const pickImage = async () => {
+    let permissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (permissions?.granted) {
+      let result = await ImagePicker.launchImageLibraryAsync();
+      if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
+      else Alert.alert("Permissions haven't been granted.");
+    }
+  };
+
+  const takePhoto = async () => {
+    let permissions = await ImagePicker.requestCameraPermissionsAsync();
+    if (permissions?.granted) {
+      let result = await ImagePicker.launchCameraAsync();
+      if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
+      else Alert.alert("Permissions haven't been granted.");
+    }
   };
 
   return (
