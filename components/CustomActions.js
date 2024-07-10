@@ -1,6 +1,7 @@
 import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import * as Location from "expo-location";
+import * as ImagePicker from "expo-image-picker";
 
 const CustomActions = ({ wrapperStyle, iconTextStyle, onSend }) => {
   //useActionSheet is a hook that provides functionality to show and action sheet
