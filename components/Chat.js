@@ -42,7 +42,14 @@ const Chat = ({ route, navigation, db, isConnected }) => {
 
   //creates the circle action button
   const renderCustomActions = (props) => {
-    return <CustomActions {...props} />;
+    return (
+      <CustomActions
+        {...props}
+        storage={storage}
+        onSend={onSend}
+        userID={userID}
+      />
+    );
   };
 
   //save messages to the device's local storage
