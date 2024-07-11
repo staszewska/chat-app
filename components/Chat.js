@@ -13,7 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomActions from "./CustomActions";
 import MapView from "react-native-maps";
 
-const Chat = ({ route, navigation, db, isConnected }) => {
+const Chat = ({ route, navigation, db, isConnected, storage }) => {
   const { name, background, userID } = route.params;
 
   const [messages, setMessages] = useState([]);
@@ -101,7 +101,12 @@ const Chat = ({ route, navigation, db, isConnected }) => {
   }, [isConnected]);
 
   const onSend = (newMessages) => {
-    addDoc(collection(db, "messages"), newMessages[0]);
+    newMessages.forEach((message) => {
+      addDoc(collection(db, "messages"), {
+        ...message,
+        createdAt: new Date(),
+      });
+    });
   };
 
   //create custom view for the location
