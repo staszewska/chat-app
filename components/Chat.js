@@ -44,10 +44,10 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
   const renderCustomActions = (props) => {
     return (
       <CustomActions
-        {...props}
         storage={storage}
         onSend={onSend}
         userID={userID}
+        {...props}
       />
     );
   };
@@ -100,13 +100,10 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
     };
   }, [isConnected]);
 
+  //function that handles new massages
   const onSend = (newMessages) => {
-    newMessages.forEach((message) => {
-      addDoc(collection(db, "messages"), {
-        ...message,
-        createdAt: new Date(),
-      });
-    });
+    console.log("new massages array: ", newMessages[0]);
+    addDoc(collection(db, "messages"), newMessages[0]);
   };
 
   //create custom view for the location
