@@ -26,22 +26,23 @@ const firebaseConfig = {
   appId: "1:122301303822:web:2c3bd92678578fd6e1005f",
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-// Initialize Firestore and get a reference to the service
-const db = getFirestore(app);
-
-// Initialize Storage and get a reference to the service
-const storage = getStorage(app);
-
-// Initialize Firebase Auth with persistence
-const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(AsyncStorage),
-});
-
 const App = () => {
   const connectionStatus = useNetInfo();
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+  // Initialize Firestore and get a reference to the service
+  const db = getFirestore(app);
+
+  // Initialize Storage and get a reference to the service
+  const storage = getStorage(app);
+
+  // Initialize Firebase Auth with persistence
+  // const auth = initializeAuth(app, {
+  //   persistence: getReactNativePersistence(AsyncStorage),
+  // });
+
   useEffect(() => {
     if (connectionStatus.isConnected === false) {
       Alert.alert("Connection Lost!");
