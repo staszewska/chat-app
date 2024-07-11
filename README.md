@@ -21,20 +21,21 @@ A mobile chat application built with React Native. The app will provide users wi
 
 ### Installation
 
-Clone the repository: git clone https://github.com/staszewska/chat-app
-Install dependencies: npm install
-Install required dependencies:
+- Clone the repository: git clone https://github.com/staszewska/chat-app
+- Install dependencies: npm install
+- Install required dependencies:
 
 Google Firestor/Firebase
-Create an account
-Start a new project
-Set up database under build --> Firestore Database
-Activate storage
-Change rules from 'allow read, write: if false;' to 'allow read, write: if true;'
-Start the Expo development server: npx expo start
-Usage
 
-1. Running on an Emulator:
+- Create an account
+- Start a new project
+- Set up database under build --> Firestore Database
+- Activate storage
+- Change rules from 'allow read, write: if false;' to 'allow read, write: if true;'
+- Start the Expo development server: npx expo start
+  Usage
+
+Running on an Emulator:
 
 Ensure you have an Android or iOS emulator running.
 Press a (for Android) or i (for iOS) in the Expo CLI to start the app on the emulator. 2. Running on a Physical Device:
